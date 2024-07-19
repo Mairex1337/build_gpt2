@@ -1,0 +1,388 @@
+Using cuda
+10.788929 M parameters
+Step: 0, Train loss: 4.2849, Eval loss: 4.2823, Time per step: 0.0000
+Step: 500, Train loss: 2.0112, Eval loss: 2.0971, Time per step: 0.2608
+Step: 1000, Train loss: 1.6021, Eval loss: 1.7830, Time per step: 0.2630
+Step: 1500, Train loss: 1.4412, Eval loss: 1.6396, Time per step: 0.2630
+Step: 2000, Train loss: 1.3430, Eval loss: 1.5724, Time per step: 0.2674
+Step: 2500, Train loss: 1.2809, Eval loss: 1.5330, Time per step: 0.2676
+Step: 3000, Train loss: 1.2268, Eval loss: 1.5094, Time per step: 0.2650
+Step: 3500, Train loss: 1.1824, Eval loss: 1.4881, Time per step: 0.2680
+Step: 4000, Train loss: 1.1475, Eval loss: 1.4869, Time per step: 0.2664
+Step: 4500, Train loss: 1.1108, Eval loss: 1.4805, Time per step: 0.2940
+Step: 4999, Train loss: 1.0779, Eval loss: 1.4920, Time per step: 0.2659
+
+ 
+But with prison: I will stead with you.
+
+ISABELLA:
+Carress, all do; and I'll say your honour self good:
+Then I'll regn your highness and
+Compell'd by my sweet gates that you may:
+Valiant make how I heard of you.
+
+ANGELO:
+Nay, sir, Isay!
+
+ISABELLA:
+I am sweet men sister as you steed.
+
+LUCIO:
+As it if you in the case would princily,
+I'll rote, sir, I did cannot now at me?
+That look thence, thy children shall be you called.
+
+DUKE VINCENTIO:
+Marry, though I do read you!
+
+LUCIO:
+O that mufflest than that should do worse a mode,
+By good clopHelden brick, your petite infect,
+Give mattering summour; I pray you have an eanning of you,
+May be past a press'd, so we show with my walls.
+I slept, I play; for I am, but will.
+
+Second Peter:
+Hold Claudio you that sees to meet you, Tranio;
+Her well with my wounds shall see ht; but he were
+a smoth way his eweary wanto-mou rich on our
+A rose faitter gash; parce mo know that he did.
+
+DUCHESS OF YORY:
+Why, how far, ay? see, methought be not upon't?
+
+RICHMOND:
+No more!
+Beseech you are I turn the banish
+Nothing removed and turn'd the king sight.
+
+RICHARD:
+It mean us grows muture with now, like some tailor,
+That gliers make him speeding leaves ranted this law,
+And may as the noble liberty hatch,
+Something me high all buy, as well her she carried
+As young my demands? is clear?
+Love in my loyal pleggage?
+
+LEONTES:
+Fair God's fordship's noble could. Pray, sir, for
+my weeds, stips: old the wisestray follow.
+
+WELBOW:
+Pray, you are not honour.
+
+POLIXENES:
+My lords leve, you'll not so be. give me leave
+your father, for the offence but set this taughting
+war the su glass. Here in blood me with oath.
+What jot she'll cont many in meny fool
+Have yielege it, I acconds say 'tis beyn, but
+Loopless it dark,
+the plantage: would I, as we
+Hath thy son a word, year my husband; who
+shall meet there comet; and, even out the noble warter,
+As the whore our grace would slave, so much,
+He chides me loves me in for usurpians,
+Which the beggars he with no presently thing
+Affliction from a story
+Of nalte in strange and mighty begs than may.
+The gleeping sense law all him with these hours,
+He swear thee she had manquish that hath,
+I one was hated upon at I keep that her, this
+Have we beganced, humtly disdainted with thee.
+
+DUKE OF YORK:
+Castle, like a jot for right of many,
+Signing Aumerleon second and makes the preceedon
+At Richard 'Death,' father,' quoth,
+Their souls and I should turder--
+When I have the feot arged and goward course
+With his absolemn somedy. Come, girls, tas his dar?
+
+ESCALUS:
+Belike your way told him,
+As he had been scoped with ssake,
+Thrives not like, and so I condem'd,
+The flinty true modesty veinsance,
+And we come intime may moany inflock,
+And lie heaven so that sound. Besidest there, go, let's
+Be strangel the king; I live the buttering eye:
+Why mind and what is my loyalty grant sorrow;
+Such depose the tribunes to my heart;
+For all my hatred his val-salves must negly.
+
+KING RICHARD II:
+Behold, dear my spirits,
+Renowner and him have misters to hear me move;
+Lent it shall play till be visita.
+I'll do I tell them where to the commons tal.
+
+BUCKINGHAM:
+I know's now to stay.
+
+QUEEN ELIZABETH:
+What vow that is the field of them?
+
+CLIFFORD:
+No, bid you without not the blush, nor now:
+Though the dreath of this outch, better mew'd;
+And thus mockt our never have we carourelleng you.
+
+BRAKENBY:
+Methinks your grace,--
+
+CLARENCE:
+Nay, stay.
+
+DUCHESS OF YORK:
+Look, good to honour, nor at pardon's hearing with a dear;
+But, like virtuous spirit, and timutic me
+The gods against them in a piej of sance by;
+That will I burst my had no rest sorrence.
+
+KING RICHARD III:
+My tribune, his office hath broken the winter,
+Or with them, by strengthen away her is one,
+That, tacking out my life. But, knows my tears;
+We down thy will not prove to thee ild algieve
+From the head and dangerouses insake.
+
+BUCKINGHAM:
+Here's so lies and aproad!
+
+Second Watchman:
+Ut, 'tis no prince I have senduY:
+Lord Henry, there's you are nose.
+
+GLOUCESTER:
+Helet Henry, why somethires slitters will in trm?
+
+TRANIO:
+Why, come on, let me this sweet please;
+Have provised the statue out.
+
+KING HENRY VI:
+Farewell, my lord:
+'Tis good denuly sight he tell swear
+Let some.
+
+FRIAR LAURENCE:
+The floution of a pricham's wervive,
+As I am; the bold pasherns you here, as be
+I set him from you'r glory imprison for you,
+And will craft such exerce myself a face;
+And none own us to meet him in back.
+
+ROMEO:
+Ull thy husband, by Mighton Gaunts:
+The  more few the marshy combances of brief
+Wars kings from York and Richard's Bona,--
+Then were we touch the best smal clast have of the east
+By Certiumen, God will be put upon,
+Our lean: long we stinue, thinks I sates in a march.
+Ah, what? dopt, Clifford, wilt thou hast confess.
+
+MONTAGUE:
+Then Lewis a wonder? why, hath loving your mother?
+
+HENRY BOLINGBROKE:
+But I will not yet?
+
+CLIONUS:
+True, that unhallower,
+By resolation wrongs now
+Has falsed your banishment.
+
+Second Senator:
+Wence, sir, go me to you, you will be
+
+
+WITH TORCH.COMPILE:
+
+Using cuda
+10.788929 M parameters
+Step: 0, Train loss: 4.2849, Eval loss: 4.2823, Time per step: 0.0000
+Step: 500, Train loss: 2.0061, Eval loss: 2.0940, Time per step: 0.2541
+Step: 1000, Train loss: 1.5980, Eval loss: 1.7809, Time per step: 0.2192
+Step: 1500, Train loss: 1.4385, Eval loss: 1.6384, Time per step: 0.2186
+Step: 2000, Train loss: 1.3406, Eval loss: 1.5718, Time per step: 0.2209
+Step: 2500, Train loss: 1.2768, Eval loss: 1.5345, Time per step: 0.2425
+Step: 3000, Train loss: 1.2281, Eval loss: 1.5115, Time per step: 0.2233
+Step: 3500, Train loss: 1.1822, Eval loss: 1.4912, Time per step: 0.2214
+Step: 4000, Train loss: 1.1458, Eval loss: 1.4839, Time per step: 0.2191
+Step: 4500, Train loss: 1.1074, Eval loss: 1.4720, Time per step: 0.2191
+Step: 4999, Train loss: 1.0740, Eval loss: 1.4872, Time per step: 0.2189
+
+
+Thou shalt will innonency trive in thee,
+Have I forth thine tidings: therefore
+Come, we stand it not stir slain's expite.
+Come, course: some that thou canst stale.
+
+FRIAR LAURENCE:
+Well, pronounce, and go to us it an assense.
+
+FRIAR LAURENCE:
+O cousin, petition, like the duke of virtue,
+I pray thy death and power. But, so try:
+And, by smerly, were my town, wind with raz-house
+For profane at least, gavourn'd my gagest!
+
+SAMPSON:
+Thou should utter than I, an earl man, as lies
+ere is thy face--that to I burst as trust
+Thy land thy lady?
+
+GREY:
+Faither, to sweet no il.
+As shortly lost,
+What, liken one faith with woes along.
+
+GRUMIO:
+Wreat should tell't o'er redren here estimple;
+And thou the son'st things of valour pasters' treasons
+Smiles of crowning their head, not weit;
+And send their tunes with any rigous sights!
+
+LEONTES:
+Our requive' speechly is off:
+Sit is the light: hast thou did Christ before some very
+I play with thee.
+
+BENVOLIO:
+Sir, sir, tribunes.
+
+ANTIGONUS:
+Hortenss, that love lies heaven to sit Rithal.
+
+SICINIUS:
+What bound will be Rome
+Had cub thee.
+
+LARTIUS:
+Why certain to chalf?
+
+LADUCENTIO:
+True he is comfort.
+
+LUCIO:
+Now, devoucest.
+
+CAMIUS:
+Well, I love of thy way; my grassions arm;
+Resign tears thy women, that he were some speech
+Forgetter store, why, sits upost,
+Made as which I take her that the fuwl of thine own,
+
+ESCALUS:
+O, it is a son-will shon be oble: last of a Strain;
+And with the dread let his broast foot.
+Long, obeth and deliver why plicky force
+I have no meet though to doubt him as live.
+Thou art thy leat some, that steed'st thy purince
+Have misst straight with spit alaufness: for I pray no
+Dreap'd that look in upon't, it were abuble and
+Upon the people. Beshed, when the 'onscurion, horsely
+Have had noble Romeo? Your head, who, I am,
+Sit's well appeased in it, is; I am no crave;
+The
+Rightful write sub subjects, of smilest are rich,
+For smilen'sh; they to the power nuptines,
+For your voices is sleep,
+Sarence ten impersion.
+
+HERMIONE:
+You have fewn'd it.
+If he subwitch'd me order where' Hungs' 'tis yet:
+For the king, for he is some dead; now to die:
+Honesty give me and not pleasure postuments:
+But the grew lies to sigh o' 'lege, how the ears that
+Are conject my thrown against upon't!
+
+FRIAR THOPHER:
+How now, miss ment.
+
+Justice:
+Such once is gone as full in an ourstand.
+My wonder came to myself and my hand,
+And tapted then as I may be barred,
+My life may interceft be breathed of us Benell.
+Ah, thou cry heaven to creature mistake
+May perce into ligh a shame; and did no little ignory.
+
+LORTES:
+Sit pretcioze me awrong to such I am as body;
+And tutors him that given means, i' thou slavest thy well,
+And will I vent me have stepply took.
+
+JULIET:
+The speed for his ear great presently government;
+Till to what I dweck move with me from straighter's death,
+With scanding bout at dialing coronate
+To foul egar their gentlemen:
+But there's on born the fiends, they trusting else
+Leall upon their encounters' hats ands me among?
+But faintains that was a footsal time, not
+Remain to cait that have lastel-back prodishmed
+Upon the gaolers.
+
+LEONTES:
+O fair house!
+Of Truth, proof these salittle actions
+And hirst I beg.
+
+FLORIZEL:
+A graver tribunes; I strong
+Sweet sucks as mine hout of heaven as weep,
+I did cannot streak to subroy, since in madly,
+Death: likely-proouse, takes toutny reaping norce;
+With that raven wim an war us, knowledge,
+At them say 'Tisitance there speak
+As my off my crown into my brother's death;
+To held the noble posterng prince's less.
+
+WARWICK:
+Why, Warwick hast sow?
+
+WWARWICK:
+An if thou shows think, that York be not man.
+My Lord of Hereford! Sisters' John of Henry and this
+Right-pown tression Duke of Hereford, as this
+Ere under his, there thy depart brend with Prince have wronge:
+By thee, no less haine from this appetite,
+By last sulp shing it will. Poor courts, pries,
+His that ready prevail lauding new his roar
+Will be the king brave and again;
+Or, outst myself will live: every said sound,
+I have leave help in her shame,
+By humourity on so any friend,
+Some depared, and pardons, me heaven
+Touch'd the dreadful of that soul sweet sufficies.
+
+BENVOLIO:
+No, none are becomes no man.
+
+MARCIUS:
+O, paper!
+
+BRUTUS:
+Sir, good Mortius,
+fellows father, let have beher their heirs,
+By Ckingham at the lostness; away Master
+From this fulfil wretch of words, Caparence,
+Strong with maistrors hath be hislikely folly.
+Sir, the grave leave: then, so good to the friar.
+There's she the fellow I had destrver thank-hrow teaths;
+And ungrating great Richard's mind on a mystern,
+Fall, mighty my soldiers' love; and--
+Yet though thou might not plehent fall treading
+Desion was a pierce' distrem plaging rove as
+You have done hower a got pilot; and would be
+Or the sin curmanatrion took of these men speakride.
+
+JOHN OF GAUNT:
+O Godnigorects, if the cans keep will be granted.--
+And so, more that executed back thee along,
+Besine this, as hanged for me thy voice,
+The cpey to thee sings to cry feal
+Thy premes to te
