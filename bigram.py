@@ -18,7 +18,7 @@ print(f"Using {device}")
 torch.manual_seed(1337)
 
 #!wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt #tiny shakespeare
-with open("/home/mairex/projects/test/src/input.txt", "r", encoding="utf-8") as f:
+with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
   text = f.read()
 
 # characters that appear in the data
