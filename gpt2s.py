@@ -4,7 +4,7 @@ import torch.nn as nn
 import inspect
 from torch.nn import functional as F
 from dataclasses import dataclass
-
+import time
 import torch.optim.adamw
 
 # _______________________________________________________
@@ -73,11 +73,10 @@ class Block(nn.Module):
 @dataclass
 class GPTConfig:
     block_size: int = 1024  # maximum sequence length
-    vocab_size : int = 50257  # vocabulary size (50.000 BPE merges + 256 byte tokens + 1 <|endoftext|> token)
+    vocab_size: int = 50257  # vocabulary size (50.000 BPE merges + 256 byte tokens + 1 <|endoftext|> token)
     n_layer: int = 12  # number of attention block layers
     n_head: int = 12  # number of attention heads
     n_embd: int = 768  # embedding dimension size
-    batch_size: int = 8
 
 
 class GPT(nn.Module):
@@ -102,7 +101,7 @@ class GPT(nn.Module):
         if isinstance(module, nn.Linear):
             std = 0.02
             if hasattr(module, "NANOGPT_SCALE_INIT"):
-                std = (2 * self.config.n_layer) ** -0.5
+                std *= (2 * self.config.n_layer) ** -0.5
             torch.nn.init.normal_(module.weight, mean=0.0, std=std)
             if module.bias is not None:
                 torch.nn.init.zeros_(module.bias)
@@ -110,7 +109,7 @@ class GPT(nn.Module):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
 
 
-    def forward(self, idx, targets = None):
+    def forward(self, idx, targets=None):
         B, T = idx.size()
         assert T <= self.config.block_size, f"cannot forward sequence of length {T}, block size is {self.config.block_size}"
         pos = torch.arange(0, T, dtype=torch.long, device=idx.device)
@@ -221,7 +220,7 @@ class DataLoader():
     def next_batch(self):
         B, T = self.B, self.T
         buf = self.tokens[self.current_position: self.current_position + B*T + 1]
-        x = (buf[: - 1]).view(B, T)
+        x = (buf[: -1]).view(B, T)
         y = (buf[1:]).view(B, T)
         self.current_position += B*T
 
@@ -232,9 +231,18 @@ class DataLoader():
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
+torch.manual_seed(1337)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed(1337)
+total_batch_size = 524288 # 2**19, ~0.5M, in number of tokens
+B = 4 # micro batch size
+T = 1024 # sequence length
+assert total_batch_size % (B * T) == 0, "make sure total_batch_size is divisible by B * T"
+grad_accum_steps = total_batch_size // (B * T)
+print(f"total desired batch size: {total_batch_size}")
+print(f"=> calculated gradient accumulation steps: {grad_accum_steps}")
 
-train_loader = DataLoader(B=2, T=1024)
-
+train_loader = DataLoader(B=B, T=T)
 
 # get logits
 model = GPT(GPTConfig(vocab_size=50304))
@@ -261,15 +269,24 @@ def get_lr(it):
 
 # optimize!
 optimizer = model.configure_optimizers(weight_decay=0.1, learning_rate=6e-4, device=device)
-import time
 
 for step in range(max_steps):
     t0 = time.time()
-    x, y = train_loader.next_batch()
-    x, y = x.to(device), y.to(device)
     optimizer.zero_grad()
-    logits, loss = model(x, y)
-    loss.backward()
+
+    loss_accum = 0.0
+    for micro_step in range(grad_accum_steps):
+        x, y = train_loader.next_batch()
+        x, y = x.to(device), y.to(device)
+        logits, loss = model(x, y)
+        # we have to scale the loss to account for gradient accumulation,
+        # because the gradients just add on each successive backward().
+        # addition of gradients corresponds to a SUM in the objective, but
+        # instead of a SUM we want MEAN. Scale the loss here so it comes out right
+        loss = loss / grad_accum_steps
+        loss_accum += loss.detach()
+        loss.backward()
+
     # gradient clipping
     norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
     # determine and set the learning rate for this iteration
@@ -280,9 +297,9 @@ for step in range(max_steps):
     torch.cuda.synchronize() # wait for the GPU to finish work
     t1 = time.time()
     dt = t1 - t0 # time difference in seconds
-    tokens_processed = train_loader.B * train_loader.T
+    tokens_processed = train_loader.B * train_loader.T * grad_accum_steps
     tokens_per_sec = tokens_processed / dt
-    print(f"step: {step:4d} | loss: {loss.item():.6f} | lr {lr:.4e} | norm: {norm:.4f} | dt: {dt*1000:.2f}ms | tok/sec: {tokens_per_sec:.2f}")
+    print(f"step {step:4d} | loss: {loss_accum.item():.6f} | lr {lr:.4e} | norm: {norm:.4f} | dt: {dt*1000:.2f}ms | tok/sec: {tokens_per_sec:.2f}")
 
 
 import sys; sys.exit(0)
