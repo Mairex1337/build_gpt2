@@ -100,7 +100,7 @@ model = BigramLanguageModel(vocab_size)
 m = model.to(device)
 
 # create Optimizer object
-optimizer = torch.optim.AdamW(m.parameters(), lr=learning_rate)
+optimizer = torch.optim.AdamW(m.parameters(), lr=learning_rate, betas=(0.9, 0.95), eps=1e-8)
 print(sum(p.numel() for p in m.parameters())/1e3, "K parameters")
 
 # training loop
@@ -123,3 +123,4 @@ for iter in range(max_iters):
 # generate from the model
 context = torch.zeros((1, 1), dtype=torch.long, device=device)
 print("Output:", decode(m.generate(context, max_new_tokens=500)[0].tolist()))
+
