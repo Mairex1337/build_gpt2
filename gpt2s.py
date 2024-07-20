@@ -4,6 +4,8 @@ import torch.nn as nn
 from torch.nn import functional as F
 from dataclasses import dataclass
 
+import torch.optim.adamw
+
 # _______________________________________________________
 
 class CausalSelfAttention(nn.Module):
@@ -68,6 +70,7 @@ class GPTConfig:
     n_layer: int = 12  # number of attention block layers
     n_head: int = 12  # number of attention heads
     n_embd: int = 768  # embedding dimension size
+    batch_size: int = 8
 
 
 class GPT(nn.Module):
@@ -83,7 +86,7 @@ class GPT(nn.Module):
         ))
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
-    def forward(self, idx):
+    def forward(self, idx, targets = None):
         B, T = idx.size()
         assert T <= self.config.block_size, f"cannot forward sequence of length {T}, block size is {self.config.block_size}"
         pos = torch.arange(0, T, dtype=torch.long, device=idx.device)
@@ -94,7 +97,9 @@ class GPT(nn.Module):
             x = block(x) 
         x = self.transformer.ln_f(x)
         logits = self.lm_head(x)
-        return logits
+        if targets is not None:
+            loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
+        return logits, loss
 
 
 
@@ -147,22 +152,58 @@ class GPT(nn.Module):
 
         return model
 
-
-
 #-----------------------------------------------
-num_return_sequences = 5
-max_length  = 30
-#model = GPT.from_pretrained("gpt2")
-model = GPT(GPTConfig)
-model.eval()
-model.to("cuda")
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using device: {device}")
+"""
+def get_batch(config):
+    with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
+        text = f.read()
+    enc = tiktoken.get_encoding('gpt2')
+    tokens = torch.tensor(enc.encode(text), dtype=torch.long)
+    last_batch_ind = len(tokens) - config.batch_size * config.block_size - 1 # (10 - 8 - 2) = 0
+    index = torch.randint(low=0, high=last_batch_ind)
+    idx = tokens[index: index * config.batch_size].view(config.block_size, config.batch_size)
+"""
 
 import tiktoken
+with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
+        text = f.read()
 enc = tiktoken.get_encoding('gpt2')
+text = text[:1000]
+tokens = enc.encode(text)
+B, T = 4, 32
+buf = torch.tensor(tokens[:B*T + 1])
+buf = buf.to(device)
+x = buf[:-1].view(B, T)
+y = buf[1:].view(B, T)
+
+# get logits
+model = GPT(GPTConfig())
+model.to(device)
+
+# optimize
+optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
+
+for i in range(50):
+    optimizer.zero_grad()
+    logits, loss = model(x, y)
+    loss.backward()
+    optimizer.step()
+    print(f"Step: {i}, loss: {loss.item()}")
+
+
+
+import sys; sys.exit(0)
+
+model.eval()
+num_return_sequences = 5
+max_length = 30
 tokens = enc.encode("Hello, I'm a language model,")
-tokens = torch.tensor(tokens, dtype=torch.long)  # (8)
-tokens = tokens.unsqueeze(0).repeat(num_return_sequences, 1)  # (5, 8)
-x = tokens.to("cuda")
+tokens = torch.tensor(tokens, dtype=torch.long) # (8,)
+tokens = tokens.unsqueeze(0).repeat(num_return_sequences, 1) # (5, 8)
+x = tokens.to(device)
 
 torch.manual_seed(42)
 torch.cuda.manual_seed(42)
