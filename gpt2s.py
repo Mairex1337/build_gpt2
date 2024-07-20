@@ -14,6 +14,7 @@ class CausalSelfAttention(nn.Module):
         assert config.n_embd % config.n_head == 0
         self.c_attn = nn.Linear(config.n_embd, 3* config.n_embd)
         self.c_proj = nn.Linear(config.n_embd, config.n_embd)
+        self.c_proj.NANOGPT_SCALE_INIT = 1
         self.n_head = config.n_head
         self.n_embd = config.n_embd
         self.register_buffer("bias", torch.tril(torch.ones(config.block_size, config.block_size))
@@ -41,6 +42,8 @@ class MLP(nn.Module):
         self.c_fc = nn.Linear(config.n_embd, 4* config.n_embd)
         self.gelu = nn.GELU(approximate="tanh")
         self.c_proj = nn.Linear(4* config.n_embd, config.n_embd)
+        self.c_proj.NANOGPT_SCALE_INIT = 1
+
 
     def forward(self, x):
         x = self.c_fc(x)
@@ -85,6 +88,25 @@ class GPT(nn.Module):
             ln_f = nn.LayerNorm(config.n_embd),
         ))
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
+
+        # weight tying
+        self.transformer.wte.weight = self.lm_head.weight
+
+        self.apply(self._init_weights)
+
+    def _init_weights(self, module):
+        if isinstance(module, nn.Linear):
+            std = 0.02
+            if hasattr(module, "NANOGPT_SCALE_INIT"):
+                std = (2 * self.config.n_layers) ** -0.5
+            torch.nn.init.normal_(module.weight, mean=0.0, std=std)
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.Embedding):
+            torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
+
+
+
 
     def forward(self, idx, targets = None):
         B, T = idx.size()
@@ -154,30 +176,38 @@ class GPT(nn.Module):
 
 #-----------------------------------------------
 
+class Dataloader():
+    def __init__(self, B, T):
+        self.B = B
+        self.T = T
+        import tiktoken
+        with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
+                text = f.read()
+        enc = tiktoken.get_encoding('gpt2')
+        tokens = enc.encode(text)
+        self.tokens = torch.tensor(tokens)
+        print(f"Loaded {len(tokens)} tokens")
+        print(f"1 epoch = {len(self.tokens) // (B*T)} batches")
+
+        #state
+        self.current_position = 0
+
+    def next_batch(self):
+        B, T = self.B, self.T
+        buf = self.tokens[self.current_position: self.current_position + B*T + 1]
+        x = (buf[: - 1]).view(B, T)
+        y = (buf[1:]).view(B, T)
+        self.current_position += B*T
+
+        if (self.current_position + B * T + 1) > len(self.tokens):
+            self.current_position = 0
+        return x, y
+
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
-"""
-def get_batch(config):
-    with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
-        text = f.read()
-    enc = tiktoken.get_encoding('gpt2')
-    tokens = torch.tensor(enc.encode(text), dtype=torch.long)
-    last_batch_ind = len(tokens) - config.batch_size * config.block_size - 1 # (10 - 8 - 2) = 0
-    index = torch.randint(low=0, high=last_batch_ind)
-    idx = tokens[index: index * config.batch_size].view(config.block_size, config.batch_size)
-"""
 
-import tiktoken
-with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
-        text = f.read()
-enc = tiktoken.get_encoding('gpt2')
-text = text[:1000]
-tokens = enc.encode(text)
-B, T = 4, 32
-buf = torch.tensor(tokens[:B*T + 1])
-buf = buf.to(device)
-x = buf[:-1].view(B, T)
-y = buf[1:].view(B, T)
+train_loader = Dataloader(B=2, T=1024)
 
 # get logits
 model = GPT(GPTConfig())
@@ -187,6 +217,8 @@ model.to(device)
 optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
 
 for i in range(50):
+    x, y = train_loader.next_batch()
+    x, y = x.to(device), y.to(device)
     optimizer.zero_grad()
     logits, loss = model(x, y)
     loss.backward()
