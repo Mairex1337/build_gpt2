@@ -27,10 +27,13 @@ class CausalSelfAttention(nn.Module):
         q = q.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)  # (B, nh, T, hs)
         k = k.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)  # (B, nh, T, hs)
         v = v.view(B, T, self.n_head, C // self.n_head).transpose(1, 2)  # (B, nh, T, hs)
-        att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))  # (B, nh, T, T)
-        att = att.masked_fill(self.bias[:,:,:T,:T]== 0, float("-inf"))  # (B, nh, T, T)
-        att = F.softmax(att, dim=-1)
-        y = att @ v  # (B, nh, T, T) @  (B, nh, T, hs) --> (B, nh, T, hs)
+     
+        #att = (q @ k.transpose(-2, -1)) * (1.0 / math.sqrt(k.size(-1)))  # (B, nh, T, T)
+        #att = att.masked_fill(self.bias[:,:,:T,:T]== 0, float("-inf"))  # (B, nh, T, T)
+        #att = F.softmax(att, dim=-1)
+        #y = att @ v  # (B, nh, T, T) @  (B, nh, T, hs) --> (B, nh, T, hs)
+        y = F.scaled_dot_product_attention(q, k, v, is_causal=True)  # flash attention!
+
         y = y.transpose(1, 2).contiguous().view(B, T, C)
         y = self.c_proj(y)
         return y 
@@ -98,14 +101,12 @@ class GPT(nn.Module):
         if isinstance(module, nn.Linear):
             std = 0.02
             if hasattr(module, "NANOGPT_SCALE_INIT"):
-                std = (2 * self.config.n_layers) ** -0.5
+                std = (2 * self.config.n_layer) ** -0.5
             torch.nn.init.normal_(module.weight, mean=0.0, std=std)
             if module.bias is not None:
                 torch.nn.init.zeros_(module.bias)
         elif isinstance(module, nn.Embedding):
             torch.nn.init.normal_(module.weight, mean=0.0, std=0.02)
-
-
 
 
     def forward(self, idx, targets = None):
@@ -176,7 +177,7 @@ class GPT(nn.Module):
 
 #-----------------------------------------------
 
-class Dataloader():
+class DataLoader():
     def __init__(self, B, T):
         self.B = B
         self.T = T
@@ -207,24 +208,30 @@ class Dataloader():
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
-train_loader = Dataloader(B=2, T=1024)
+train_loader = DataLoader(B=2, T=1024)
+
 
 # get logits
-model = GPT(GPTConfig())
+model = GPT(GPTConfig(vocab_size=50304))
 model.to(device)
+model = torch.compile(model)
 
 # optimize
 optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
-
+import time
 for i in range(50):
+    t0 = time.time()
     x, y = train_loader.next_batch()
     x, y = x.to(device), y.to(device)
     optimizer.zero_grad()
     logits, loss = model(x, y)
     loss.backward()
     optimizer.step()
-    print(f"Step: {i}, loss: {loss.item()}")
-
+    torch.cuda.synchronize() # wait for the GPU to finish work
+    t1 = time.time()
+    dt = (t1 - t0)*1000 # time difference in miliseconds
+    tokens_per_sec = (train_loader.B * train_loader.T) / (t1 - t0)
+    print(f"step {i}, loss: {loss.item()}, dt: {dt:.2f}ms, tok/sec: {tokens_per_sec:.2f}")
 
 
 import sys; sys.exit(0)
