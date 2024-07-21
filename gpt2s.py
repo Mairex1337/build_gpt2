@@ -200,21 +200,35 @@ class GPT(nn.Module):
 
 
 #-----------------------------------------------
+import tiktoken
+import numpy as np
+import os
+
+def load_tokens(filename):
+    npt = np.load(filename)
+    ptt = torch.tensor(npt, dtype=torch.long)
+    return ptt
 
 class DataLoader():
-    def __init__(self, B, T):
+    def __init__(self, B, T, split):
         self.B = B
         self.T = T
-        import tiktoken
-        with open("/home/mairex/projects/test/buildGPT2/tinyshakespeare.txt", "r", encoding="utf-8") as f:
-                text = f.read()
-        enc = tiktoken.get_encoding('gpt2')
-        tokens = enc.encode(text)
-        self.tokens = torch.tensor(tokens)
-        print(f"Loaded {len(tokens)} tokens")
-        print(f"1 epoch = {len(self.tokens) // (B*T)} batches")
+        assert split in {'train', 'val'}
 
-        #state
+        # get the shard filenames
+        data_root = "edu_fineweb10B"
+        shards = os.listdir(data_root)
+        shards = [s for s in shards if split in s]
+        shards = sorted(shards)
+        shards = [os.path.join(data_root, s) for s in shards]
+        self.shards = shards
+        assert len(shards) > 0, f"no shards found for split {split}"
+        
+        print(f"found {len(shards)} shards for split {split}")
+        
+        # state, init at shard zero
+        self.current_shard = 0
+        self.tokens = load_tokens(self.shards[self.current_shard])
         self.current_position = 0
 
     def next_batch(self):
@@ -225,6 +239,8 @@ class DataLoader():
         self.current_position += B*T
 
         if (self.current_position + B * T + 1) > len(self.tokens):
+            self.current_shard = (self.current_shard + 1) % len(self.shards)
+            self.tokens = load_tokens(self.shards[self.current_shard])
             self.current_position = 0
         return x, y
 
@@ -242,7 +258,7 @@ grad_accum_steps = total_batch_size // (B * T)
 print(f"total desired batch size: {total_batch_size}")
 print(f"=> calculated gradient accumulation steps: {grad_accum_steps}")
 
-train_loader = DataLoader(B=B, T=T)
+train_loader = DataLoader(B=B, T=T, split="train")
 
 # get logits
 model = GPT(GPTConfig(vocab_size=50304))
@@ -251,8 +267,9 @@ model = torch.compile(model)
 
 max_lr = 6e-4
 min_lr = max_lr * 0.1
-warmup_steps = 10
-max_steps = 50
+warmup_steps = 420  #blaze
+max_steps = 19073
+
 def get_lr(it):
     # 1) linear warmup for warmup_iters steps
     if it < warmup_steps:
