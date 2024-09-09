@@ -113,6 +113,7 @@ class GPT(nn.Module):
             x = block(x) 
         x = self.transformer.ln_f(x)
         logits = self.lm_head(x)
+        loss = None
         if targets is not None:
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1))
         return logits, loss
@@ -461,10 +462,11 @@ try:
 
 except RuntimeError as e:
     if "CUDA out of memory" in str(e):
-        print("Caught CUDA out of memory error")
+        print("Caught CUDA out of memory")
         if ddp:
             destroy_process_group()
-        exit(100)
+        import sys
+        sys.exit(0)
     else:
         raise e
         
