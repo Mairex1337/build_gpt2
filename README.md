@@ -1,7 +1,8 @@
 # Build GPT-2
 
 All of the code in here was a learning experience based on [Karpathy's](https://github.com/karpathy) awesome [video Lectures](https://www.youtube.com/@AndrejKarpathy)!
-Thank you!!
+
+Thank you Andrej!!
 
 This Repository includes:
 
